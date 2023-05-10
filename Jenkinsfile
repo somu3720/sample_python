@@ -73,7 +73,7 @@ pipeline {
             '''
           }
                 success("Deployment succeeded!")
-              } catch (err) {
+                catch (err) {
                 error("Deploy failed with error: ${err}")
                 echo "Rollback started"
                 sshpass -p ${REMOTE_PASS} ssh -o StrictHostKeyChecking=yes ${REMOTE_USER}@${REMOTE_HOST} "
