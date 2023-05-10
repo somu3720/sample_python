@@ -3,14 +3,14 @@ pipeline {
 
   environment {
 	APP_NAME = "my-python-app"
-    APP_VERSION = "2.0.0"
+    	APP_VERSION = "2.0.0"
 	REMOTE_USER = "username"
 	REMOTE_HOST = "ip"
 	REMOTE_Pass = "pass"
-//  SONARQUBE_URL = "my-sonarqube-instance-url"
-//  SONARQUBE_TOKEN = credentials('sonarqube-token')
-    SSH_PRIVATE_KEY = credentials('ssh-private-key')
-    SSH_KNOWN_HOSTS = sshKnownHosts(['example.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC...'])
+//  	SONARQUBE_URL = "my-sonarqube-instance-url"
+//  	SONARQUBE_TOKEN = credentials('sonarqube-token')
+//    	SSH_PRIVATE_KEY = credentials('ssh-private-key')
+//      SSH_KNOWN_HOSTS = sshKnownHosts(['example.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC...'])
 	Destination = "/path/to/deploy/Destination-$(date+%y%m%d_%H%M%S)"
 	Backup = "/path/to/backup/"
 	STAGE_NAME = ""
@@ -21,13 +21,12 @@ pipeline {
   stage('Create backup folder') {  
       steps {
 	    sh 'mkdir -p $Backup
-		sh 'mkdir -p $Destination
         }
       }
     }
 
 
-stage('SAST') {  
+/* stage('SAST') {  
       steps {
         withSonarQubeEnv('sonarqube') {
           script {
@@ -35,16 +34,15 @@ stage('SAST') {
           }
         }
       }
-    }
+    } */
 	
 	
 	stage('pre-deployment') {  
       steps {
-        sh 'ssh -o StrictHostKeyChecking=no $REMOTE_USER@REMOTE_HOST exit'          //and need a non root user with 700 permission for destination folder
-		sh 'test -d $Destination'  //  check folder already exist
-		sh 'cd $Destination && zip -r python_files.zip *.py'
-	
-
+                 //test ssh and need a non root user with 700 permission for destination folder
+		                                          //  & check folder already exist
+	sh "sshpass -p ${REMOTE_PASS} ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} 'mkdir -p ${Destination_folder} && test -d ${Destination_folder}'"
+        sh "cd ${Destination_folder} && zip -r python_files.zip *.py"
         }
       }
     }
