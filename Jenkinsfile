@@ -4,16 +4,16 @@ pipeline {
   environment {
 	APP_NAME = "my-python-app"
     	APP_VERSION = "2.0.0"
-	REMOTE_USER = "username"
-	REMOTE_HOST = "ip"
-	REMOTE_Pass = "pass"
+	REMOTE_USER = "azureuser"
+	REMOTE_HOST = "20.55.79.184"
+	REMOTE_Pass = "Jenkins@1234"
 //  	SONARQUBE_URL = "my-sonarqube-instance-url"
 //  	SONARQUBE_TOKEN = credentials('sonarqube-token')
 //    	SSH_PRIVATE_KEY = credentials('ssh-private-key')
 //      SSH_KNOWN_HOSTS = sshKnownHosts(['example.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC...'])
-	Destination = "/path/to/deploy/Destination-$(date+%y%m%d_%H%M%S)"
-	Backup = "/path/to/backup/"
-	Rollback = "/path/to/rollback/"	  
+	Destination = "/home/azureuser/deploy/Destination-$(date+%y%m%d_%H%M%S)"
+	Backup = "/home/azureuser/backup/"
+	Rollback = "/home/azureuser/rollback/"	  
 	STAGE_NAME = ""
   }
 
@@ -49,7 +49,8 @@ pipeline {
                  //test ssh and need a non root user with 700 permission for destination folder
 		                                          //  & check folder already exist
 	sh "sshpass -p ${REMOTE_PASS} ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} 'mkdir -p ${Destination_folder} && test -d ${Destination_folder}'"
-        sh "cd ${Destination_folder} && zip -r python_files.zip *.py"
+        sh "cd ${Destination_folder} && tar -czvf python_files.tar.gz *.py"
+
         }
       }
     }
@@ -94,18 +95,13 @@ pipeline {
 
 post {
     failure {
-      mail to: 'admin@example.com', subject: "Pipeline Failed: ${currentBuild.fullDisplayName}", body: "The pipeline has failed at this ${STAGE_NAME} . Please check the logs for more information."
+      mail to: 'somu3720@gmail.com', subject: "Pipeline Failed: ${currentBuild.fullDisplayName}", body: "The pipeline has failed at this ${STAGE_NAME} . Please check the logs for more information."
     }
     success {
-      mail to: 'admin@example.com', subject: "Pipeline Succeeded: ${currentBuild.fullDisplayName}", body: "The pipeline has succeeded! The deployment was successful."
+      mail to: 'somu3720@gmail.com', subject: "Pipeline Succeeded: ${currentBuild.fullDisplayName}", body: "The pipeline has succeeded! The deployment was successful."
     }
   }
 
-
-def error(message) {
-    currentBuild.result = 'FAILURE'
-    echo message
-  }
 
   def success(message) {
     currentBuild.result = 'SUCCESS'
