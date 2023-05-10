@@ -13,6 +13,7 @@ pipeline {
 //      SSH_KNOWN_HOSTS = sshKnownHosts(['example.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC...'])
 	Destination = "/path/to/deploy/Destination-$(date+%y%m%d_%H%M%S)"
 	Backup = "/path/to/backup/"
+	Rollback = "/path/to/rollback/"	  
 	STAGE_NAME = ""
   }
 
@@ -34,7 +35,13 @@ pipeline {
           }
         }
       }
-    } */
+    } 
+     scp -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$SSH_KNOWN_HOSTS . ${SSH_USER}@${SSH_HOST}:${Destination_folder}
+					sh 'check weather requirements.txt is present or not in destination folder'
+					ssh -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$SSH_KNOWN_HOSTS user@example.com 'pip3 install -r requirements.txt'
+    
+    
+    */
 	
 	
 	stage('pre-deployment') {  
@@ -50,28 +57,32 @@ pipeline {
 
 
     stage('Deploy') {   
-      steps {
-        retry(3) {
-          timeout(time: 10, unit: 'MINUTES') {
-            script {
-              try {
-                sshagent(['ssh-private-key']) {
-                  sh '''
-					
-                    scp -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$SSH_KNOWN_HOSTS . ${SSH_USER}@${SSH_HOST}:${Destination_folder}
-					sh 'check weather requirements.txt is present or not in destination folder'
-					ssh -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$SSH_KNOWN_HOSTS user@example.com 'pip3 install -r requirements.txt'
-					
-                  '''
-                }
+  steps {
+    retry(3) {
+      timeout(time: 10, unit: 'MINUTES') {
+        script {
+          try {
+            sh '''
+              sshpass -p ${REMOTE_PASS} scp -o StrictHostKeyChecking=yes . ${REMOTE_USER}@${REMOTE_HOST}:${Destination_folder} &&
+                    sshpass -p ${REMOTE_PASS} ssh -o StrictHostKeyChecking=yes ${REMOTE_USER}@${REMOTE_HOST} 
+                    "
+                      ./install_python.sh
+                      test -f ${Destination_folder}/requirements.txt &&
+                      pip3 install -r ${Destination_folder}/requirements.txt	
+                    "
+            '''
+          }
                 success("Deployment succeeded!")
               } catch (err) {
                 error("Deploy failed with error: ${err}")
-				echo "rollback started"
-						ssh -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$SSH_KNOWN_HOSTS user@example.com tar czvf ${Destination_folder} ${ROLLBACK_FOLDER} '
-						ssh -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$SSH_KNOWN_HOSTS user@example.com tar -xzvf ${BACKUP_FOLDER}  ${Destination_folder}'
-				echo 'rollback ended'	
-
+                echo "Rollback started"
+                sshpass -p ${REMOTE_PASS} ssh -o StrictHostKeyChecking=yes ${REMOTE_USER}@${REMOTE_HOST} "
+                  tar czvf ${Backup_folder}/${ROLLBACK_FOLDER}.tar.gz ${Destination_folder} &&
+                  rm -rf ${Destination_folder} &&
+                  tar -xzvf ${Backup_folder}/backup-*.tar.gz &&
+                  mv ${ROLLBACK_FOLDER} ${Destination_folder}
+                "
+                echo "Rollback completed"
               }
             }
           }
@@ -79,10 +90,9 @@ pipeline {
       }
     }
   }
-  
-  
 
-  post {
+
+post {
     failure {
       mail to: 'admin@example.com', subject: "Pipeline Failed: ${currentBuild.fullDisplayName}", body: "The pipeline has failed at this ${STAGE_NAME} . Please check the logs for more information."
     }
@@ -91,17 +101,23 @@ pipeline {
     }
   }
 
-  def error(message) {
-    mail to: 'admin@example.com', subject: "Pipeline Failed: ${currentBuild.fullDisplayName}", body: message
+
+def error(message) {
     currentBuild.result = 'FAILURE'
     echo message
   }
 
   def success(message) {
-    mail to: 'admin@example.com', subject: "Pipeline Succeeded: ${currentBuild.fullDisplayName}", body: message
-    echo message
+    currentBuild.result = 'SUCCESS'
+    echo 'succeeded in the above step'
   }
 }
+
+def error(message) {
+    currentBuild.result = 'FAILURE'
+    echo 'failed in the above step'
+}
+
 
 // Exit with status code 0
 sh 'exit 0'
