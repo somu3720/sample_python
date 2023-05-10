@@ -39,7 +39,7 @@ pipeline {
     */
 	
 	
-	stage('pre-deployment') {  
+stage('pre-deployment') {  
       steps {
                  //test ssh and need a non root user with 700 permission for destination folder
 		                                          //  & check folder already exist
@@ -50,7 +50,7 @@ pipeline {
 
         }
       }
-    }
+    
 
 
 
