@@ -11,7 +11,7 @@ pipeline {
 //  	SONARQUBE_TOKEN = credentials('sonarqube-token')
 //    	SSH_PRIVATE_KEY = credentials('ssh-private-key')
 //      SSH_KNOWN_HOSTS = sshKnownHosts(['example.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC...'])
-	  Destination_folder = "/home/azureuser/deploy/Destination-${date+%y%m%d_%H%M%S}"
+	  Destination_folder = "/home/azureuser/deploy/Destination-/${date+%y%m%d_%H%M%S}/"
 	Backup_folder = "/home/azureuser/backup/"
 	Rollback_folder = "/home/azureuser/rollback/"	  
 	STAGE_NAME = ""
