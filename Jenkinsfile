@@ -51,10 +51,7 @@ stage('pre-deployment') {
         }
       }
     
-
-
-
-    stage('Deploy') {   
+stage('Deploy') {
   steps {
     retry(3) {
       timeout(time: 10, unit: 'MINUTES') {
@@ -62,33 +59,34 @@ stage('pre-deployment') {
           try {
             sh '''
               sshpass -p ${REMOTE_PASS} scp -o StrictHostKeyChecking=yes . ${REMOTE_USER}@${REMOTE_HOST}:${Destination_folder} &&
-              sshpass -p ${REMOTE_PASS} ssh -o StrictHostKeyChecking=yes ${REMOTE_USER}@${REMOTE_HOST} 
-                    "
-		      cd .
-		      tar -xzvf 
-                      ./install_python.sh
-                      test -f ${Destination_folder}/requirements.txt &&
-                      pip3 install -r ${Destination_folder}/requirements.txt	
-                    "
+              sshpass -p ${REMOTE_PASS} ssh -o StrictHostKeyChecking=yes ${REMOTE_USER}@${REMOTE_HOST} "
+                cd .
+                tar -xzvf ./install_python.sh
+                test -f ${Destination_folder}/requirements.txt &&
+                pip3 install -r ${Destination_folder}/requirements.txt	
+              "
             '''
+            success("Deployment succeeded!")
           }
-                success("Deployment succeeded!")
-                catch (err) {
-                error("Deploy failed with error: ${err}")
-                echo "Rollback started"
-                sshpass -p ${REMOTE_PASS} ssh -o StrictHostKeyChecking=yes ${REMOTE_USER}@${REMOTE_HOST} "
-                  tar czvf ${Backup_folder}/${Rollback_folder}.tar.gz ${Destination_folder} &&
-                  rm -rf ${Destination_folder} &&
-                  tar -xzvf ${Backup_folder}/backup-*.tar.gz &&
-                  mv ${Rollback_folder} ${Destination_folder}
-                "
-                echo "Rollback completed"
-              }
-            }
+          catch (err) {
+            error("Deploy failed with error: ${err}")
+            echo "Rollback started"
+            sshpass -p ${REMOTE_PASS} ssh -o StrictHostKeyChecking=yes ${REMOTE_USER}@${REMOTE_HOST} "
+              tar czvf ${Backup_folder}/${Rollback_folder}.tar.gz ${Destination_folder} &&
+              rm -rf ${Destination_folder} &&
+              tar -xzvf ${Backup_folder}/backup-*.tar.gz &&
+              mv ${Rollback_folder} ${Destination_folder}
+            "
+            echo "Rollback completed"
           }
         }
       }
     }
+  }
+}
+
+
+
   }
 
 
