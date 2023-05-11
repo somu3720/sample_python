@@ -18,6 +18,7 @@ pipeline {
           //  cp . ${DESTINATION_FOLDER}
          //   cd ${DESTINATION_FOLDER} && tar -czvf python_files.tar.gz .
 	 //   scp ${DESTINATION_FOLDER} ${REMOTE_USER}@${REMOTE_HOST}:${DESTINATION_FOLDER}
+	  //echo userBPassword | sudo -S -u userB whoami  
 	  
 	  
 	  // dep
@@ -44,8 +45,7 @@ pipeline {
 	cp -r /var/lib/jenkins/workspace/MDQLDEMO /test/dest
 	pwd
 	tar -czvf dest.tar.gz /test/
-	su azureuser
-	whoami
+	echo Jenkins@1234 | sudo -S -u azureuser whoami  
 	sshpass -p "Jenkins@1234" scp /test/dest/MDQLDEMO/dest.tar.gz azureuser@20.55.79.184:/home/azureuser/
 	 
 	 
