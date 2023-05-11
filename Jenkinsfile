@@ -42,6 +42,7 @@ pipeline {
 	whoami
 	mkdir -p /test/dest && test -d /test/dest
 	cp -r /var/lib/jenkins/workspace/'MDQL DEMO' /test/dest
+	pwd
 	tar -czvf dest.tar.gz /test/
 	sshpass -p "Jenkins@1234" scp dest.tar.gz azureuser@20.55.79.184:/home/azureuser/
 	 
