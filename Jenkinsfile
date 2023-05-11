@@ -88,7 +88,7 @@ pipeline {
     }
   }
 
-*/  post {
+/*  post {
     failure {
       script {
         STAGE_NAME = env.STAGE_NAME ?: "unknown stage"
