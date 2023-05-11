@@ -29,6 +29,11 @@ pipeline {
 	//    copy dest_folder to bkp folder
 	
 	  
+	  //rlbk
+	  //         ssh ${REMOTE_USER}@${REMOTE_HOST} "
+   // 	      mv dest to roll
+  //          remove dest as well dest.tar.gz
+	  
     stage('Pre-deployment') {
       steps {
         script {
@@ -77,15 +82,13 @@ pipeline {
       steps {
         script {
           sh """
-   //         ssh ${REMOTE_USER}@${REMOTE_HOST} "
-   // 	      mv dest to roll
-  //          remove dest as well dest.tar.gz
+   
   	
 	      ssh azureuser@20.55.79.184
-	      mkdir -p /home/azureuser/rlbk/
+	      sudo mkdir -p /home/azureuser/rlbk/
 	      cd /home/azureuser/
-	      mv dest.tar.gz /home/azureuser/rlbk
-	      rm -rf dest.tar.gz /home/azureuser/dest
+	      sudo mv dest.tar.gz /home/azureuser/rlbk
+	      sudo rm -rf dest.tar.gz /home/azureuser/dest
 	    
 
             "
