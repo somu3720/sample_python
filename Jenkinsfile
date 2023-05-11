@@ -45,7 +45,8 @@ pipeline {
 	cp -r /var/lib/jenkins/workspace/MDQLDEMO /test/dest
 	pwd
 	tar -czvf dest.tar.gz /test/
-	echo Jenkins@1234 | sudo -S -u azureuser whoami  
+	echo Jenkins@1234 | sudo -S -u azureuser 
+	whoami  
 	sshpass -p "Jenkins@1234" scp /test/dest/MDQLDEMO/dest.tar.gz azureuser@20.55.79.184:/home/azureuser/
 	 
 	 
