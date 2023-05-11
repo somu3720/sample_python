@@ -38,13 +38,13 @@ pipeline {
     
     
     */
-	
+ // def str = '#\\$commonTomcat620.max_threads\\$#'	
 	
 stage('pre-deployment') {  
       steps {
                  //test ssh and need a non root user with 700 permission for destination folder
 		                                          //  & check folder already exist
-	sh "mkdir -p ${Destination_folder} && test -d ${Destination_folder}"
+	sh "mkdir -p #\\${Destination_folder}\\# && test -d ${Destination_folder}"
 	sh "cp . ${Destination_folder}"   
         sh "cd ${Destination_folder} && tar -czvf python_files.tar.gz ."
 	      
