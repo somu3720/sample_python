@@ -6,9 +6,9 @@ pipeline {
     APP_VERSION = "2.0.0"
     REMOTE_USER = "azureuser"
     REMOTE_HOST = "20.55.79.184"
-    DESTINATION_FOLDER = "/home/azureuser/deploy/Destination"
-    BACKUP_FOLDER = "/home/azureuser/backup/"
-    ROLLBACK_FOLDER = "/home/azureuser/rollback/"
+    DESTINATION_FOLDER = "/home/azureuser/dest/"
+    BACKUP_FOLDER = "/home/azureuser/bkp/"
+    ROLLBACK_FOLDER = "/home/azureuser/rlbk/"
     STAGE_NAME = ""
   }
 
@@ -17,9 +17,17 @@ pipeline {
       steps {
         script {
           sh """
-            mkdir -p ${DESTINATION_FOLDER} && test -d ${DESTINATION_FOLDER}
-            cp . ${DESTINATION_FOLDER}
-            cd ${DESTINATION_FOLDER} && tar -czvf python_files.tar.gz .
+          //  mkdir -p ${DESTINATION_FOLDER} && test -d ${DESTINATION_FOLDER}
+          //  cp . ${DESTINATION_FOLDER}
+         //   cd ${DESTINATION_FOLDER} && tar -czvf python_files.tar.gz .
+	 //   scp ${DESTINATION_FOLDER} ${REMOTE_USER}@${REMOTE_HOST}:${DESTINATION_FOLDER}
+	 
+	 mkdir -p /home/azureuser/dest && test -d /home/azureuser/dest
+	 cp . /home/azureuser/dest
+	 tar -czvf dest.tar.gz .
+	 scp /home/azureuser/dest azureuser@20.55.79.184:/home/azureuser/
+	 
+	 
           """
         }
       }
@@ -30,12 +38,27 @@ pipeline {
           timeout(time: 10, unit: 'MINUTES') {
             script {
               sh """
-                scp ${DESTINATION_FOLDER} ${REMOTE_USER}@${REMOTE_HOST}:${DESTINATION_FOLDER}
-                ssh ${REMOTE_USER}@${REMOTE_HOST} "
-                  cd ${DESTINATION_FOLDER}
-                  tar -xzvf ./install_python.sh
-                  test -f ${DESTINATION_FOLDER}/requirements.txt &&
-                  pip3 install -r ${DESTINATION_FOLDER}/requirements.txt	
+         //       
+         //       ssh ${REMOTE_USER}@${REMOTE_HOST} "
+        //          cd ${DESTINATION_FOLDER}
+        //          tar -xzvf ./install_python.sh
+        //          test -f ${DESTINATION_FOLDER}/requirements.txt &&
+        //          pip3 install -r ${DESTINATION_FOLDER}/requirements.txt	
+	//    copy dest_folder to bkp folder
+	
+		 ssh azureuser@20.55.79.184
+		 mkdir -p /home/azureuser/bkp
+		 cd /home/azureuser/
+		 pwd
+		 cp dest.tar.gz /home/azureuser/bkp
+		 tar -xzvf dest.tar.gz
+		 cd dest
+		 ./install_python.sh
+		 test -f /home/azureuser/dest/requirements.txt
+		 pip3 install -r /home/azureuser/dest/requirements.txt
+		 
+		 	
+	
                 "
               """
             }
@@ -43,9 +66,29 @@ pipeline {
         }
       }
     }
+    stage('Rollback') {
+      steps {
+        script {
+          sh """
+   //         ssh ${REMOTE_USER}@${REMOTE_HOST} "
+   // 	      mv dest to roll
+  //          remove dest as well dest.tar.gz
+  	
+	      ssh azureuser@20.55.79.184
+	      mkdir -p /home/azureuser/rlbk/
+	      cd /home/azureuser/
+	      mv dest.tar.gz /home/azureuser/rlbk
+	      rm -rf dest.tar.gz /home/azureuser/dest
+	    
+
+            "
+          """
+        }
+      }
+    }
   }
 
- */ post {
+*/  post {
     failure {
       script {
         STAGE_NAME = env.STAGE_NAME ?: "unknown stage"
