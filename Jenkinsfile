@@ -16,6 +16,17 @@ pipeline {
 	Rollback_folder = "/home/azureuser/rollback/"	  
 	STAGE_NAME = ""
   }
+	
+def success(message) {
+    currentBuild.result = 'SUCCESS'
+    echo 'succeeded in the above step'
+  }
+}
+
+def error(message) {
+    currentBuild.result = 'FAILURE'
+    echo 'failed in the above step'
+}	
 
   stages {
   
@@ -100,16 +111,6 @@ post {
   }
 
 
-  def success(message) {
-    currentBuild.result = 'SUCCESS'
-    echo 'succeeded in the above step'
-  }
-}
-
-def error(message) {
-    currentBuild.result = 'FAILURE'
-    echo 'failed in the above step'
-}
 
 
 // Exit with status code 0
