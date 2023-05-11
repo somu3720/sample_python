@@ -44,7 +44,7 @@ stage('pre-deployment') {
       steps {
                  //test ssh and need a non root user with 700 permission for destination folder
 		                                          //  & check folder already exist
-	sh "mkdir -p \${Destination_folder} && test -d \${Destination_folder}"
+	sh "mkdir -p ${Destination_folder} && test -d ${Destination_folder}"
 	sh "cp . ${Destination_folder}"   
         sh "cd ${Destination_folder} && tar -czvf python_files.tar.gz ."
 	      
@@ -69,16 +69,15 @@ stage('Deploy') {
             '''
             success("Deployment succeeded!")
           }
-          catch (err) {
+	
+		catch (err) {	  
+		  
             error("Deploy failed with error: ${err}")
-            echo "Rollback started"
-            sshpass -p ${REMOTE_PASS} ssh -o StrictHostKeyChecking=yes ${REMOTE_USER}@${REMOTE_HOST} "
-              tar czvf ${Backup_folder}/${Rollback_folder}.tar.gz ${Destination_folder} &&
-              rm -rf ${Destination_folder} &&
-              tar -xzvf ${Backup_folder}/backup-*.tar.gz &&
-              mv ${Rollback_folder} ${Destination_folder}
-            "
-            echo "Rollback completed"
+	  
+            sh 'echo "Rollback started"'
+            sh 'sshpass -p ${REMOTE_PASS} ssh -o StrictHostKeyChecking=yes ${REMOTE_USER}@${REMOTE_HOST}'
+            sh 'tar czvf ${Backup_folder}/${Rollback_folder}.tar.gz ${Destination_folder} && rm -rf ${Destination_folder} && tar -xzvf ${Backup_folder}/backup-*.tar.gz && mv ${Rollback_folder} ${Destination_folder}'
+            sh 'echo "Rollback completed"'
           }
         }
       }
