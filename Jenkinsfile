@@ -42,7 +42,7 @@ pipeline {
 	whoami
 	mkdir -p /test/dest && test -d /test/dest
 	cp -r /var/lib/jenkins/workspace/'MDQL DEMO' /test/dest
-	tar -czvf dest.tar.gz .
+	tar -czvf dest.tar.gz /test/dest
 	scp /test/dest azureuser@20.55.79.184:/home/azureuser/
 	 
 	 
