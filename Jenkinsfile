@@ -41,7 +41,7 @@ pipeline {
 	
 	whoami
 	mkdir -p /test/dest && test -d /test/dest
-	cp . /test/dest
+	cp -r /test/dest
 	tar -czvf dest.tar.gz .
 	scp /test/dest azureuser@20.55.79.184:/home/azureuser/
 	 
