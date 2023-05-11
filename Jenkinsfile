@@ -13,16 +13,28 @@ pipeline {
   }
 
   stages {
+	 // pre-dep
+	 //  mkdir -p ${DESTINATION_FOLDER} && test -d ${DESTINATION_FOLDER}
+          //  cp . ${DESTINATION_FOLDER}
+         //   cd ${DESTINATION_FOLDER} && tar -czvf python_files.tar.gz .
+	 //   scp ${DESTINATION_FOLDER} ${REMOTE_USER}@${REMOTE_HOST}:${DESTINATION_FOLDER}
+	  
+	  
+	  // dep
+	  //       ssh ${REMOTE_USER}@${REMOTE_HOST} "
+        //          cd ${DESTINATION_FOLDER}
+        //          tar -xzvf ./install_python.sh
+        //          test -f ${DESTINATION_FOLDER}/requirements.txt &&
+        //          pip3 install -r ${DESTINATION_FOLDER}/requirements.txt	
+	//    copy dest_folder to bkp folder
+	
+	  
     stage('Pre-deployment') {
       steps {
         script {
           sh """
-          //  mkdir -p ${DESTINATION_FOLDER} && test -d ${DESTINATION_FOLDER}
-          //  cp . ${DESTINATION_FOLDER}
-         //   cd ${DESTINATION_FOLDER} && tar -czvf python_files.tar.gz .
-	 //   scp ${DESTINATION_FOLDER} ${REMOTE_USER}@${REMOTE_HOST}:${DESTINATION_FOLDER}
 	
-	sudo -i
+	
 	mkdir -p /home/azureuser/dest && test -d /home/azureuser/dest
 	cp . /home/azureuser/dest
 	tar -czvf dest.tar.gz .
@@ -39,14 +51,8 @@ pipeline {
           timeout(time: 10, unit: 'MINUTES') {
             script {
               sh """
-         //       
-         //       ssh ${REMOTE_USER}@${REMOTE_HOST} "
-        //          cd ${DESTINATION_FOLDER}
-        //          tar -xzvf ./install_python.sh
-        //          test -f ${DESTINATION_FOLDER}/requirements.txt &&
-        //          pip3 install -r ${DESTINATION_FOLDER}/requirements.txt	
-	//    copy dest_folder to bkp folder
-	
+              
+         
 		 ssh azureuser@20.55.79.184
 		 mkdir -p /home/azureuser/bkp
 		 cd /home/azureuser/
