@@ -39,11 +39,11 @@ pipeline {
         script {
           sh """
 	
-	
-	sudo mkdir -p /home/azureuser/dest && test -d /home/azureuser/dest
-	sudo cp . /home/azureuser/dest
-	sudo tar -czvf dest.tar.gz .
-	sudo scp /home/azureuser/dest azureuser@20.55.79.184:/home/azureuser/
+	whoami
+	mkdir -p /home/azureuser/dest && test -d /home/azureuser/dest
+	cp . /home/azureuser/dest
+	tar -czvf dest.tar.gz .
+	scp /home/azureuser/dest azureuser@20.55.79.184:/home/azureuser/
 	 
 	 
           """
@@ -57,17 +57,17 @@ pipeline {
             script {
               sh """
               
-         
+         	 whoami
 		 ssh azureuser@20.55.79.184
-		 sudo mkdir -p /home/azureuser/bkp
+		 mkdir -p /home/azureuser/bkp
 		 cd /home/azureuser/
 		 pwd
-		 sudo cp dest.tar.gz /home/azureuser/bkp
-		 sudo tar -xzvf dest.tar.gz
+		 cp dest.tar.gz /home/azureuser/bkp
+		 tar -xzvf dest.tar.gz
 		 cd dest
-		 sudo ./install_python.sh
+		 ./install_python.sh
 		 test -f /home/azureuser/dest/requirements.txt
-		 sudo pip3 install -r /home/azureuser/dest/requirements.txt
+		 pip3 install -r /home/azureuser/dest/requirements.txt
 		 
 		 	
 	
