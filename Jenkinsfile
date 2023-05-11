@@ -6,9 +6,9 @@ pipeline {
     APP_VERSION = "2.0.0"
     REMOTE_USER = "azureuser"
     REMOTE_HOST = "20.55.79.184"
-    DESTINATION_FOLDER = "/home/azureuser/dest/"
-    BACKUP_FOLDER = "/home/azureuser/bkp/"
-    ROLLBACK_FOLDER = "/home/azureuser/rlbk/"
+    DESTINATION_FOLDER = "/test/dest/"
+    BACKUP_FOLDER = "/test/bkp/"
+    ROLLBACK_FOLDER = "/test/rlbk/"
     STAGE_NAME = ""
   }
 
@@ -40,10 +40,10 @@ pipeline {
           sh """
 	
 	whoami
-	mkdir -p /home/azureuser/dest && test -d /home/azureuser/dest
-	cp . /home/azureuser/dest
+	mkdir -p /test/dest && test -d /test/dest
+	cp . /test/dest
 	tar -czvf dest.tar.gz .
-	scp /home/azureuser/dest azureuser@20.55.79.184:/home/azureuser/
+	scp /test/dest azureuser@20.55.79.184:/home/azureuser/
 	 
 	 
           """
