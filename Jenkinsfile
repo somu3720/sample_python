@@ -22,10 +22,10 @@ pipeline {
          //   cd ${DESTINATION_FOLDER} && tar -czvf python_files.tar.gz .
 	 //   scp ${DESTINATION_FOLDER} ${REMOTE_USER}@${REMOTE_HOST}:${DESTINATION_FOLDER}
 	 
-	 mkdir -p /home/azureuser/dest && test -d /home/azureuser/dest
-	 cp . /home/azureuser/dest
-	 tar -czvf dest.tar.gz .
-	 scp /home/azureuser/dest azureuser@20.55.79.184:/home/azureuser/
+	sudo mkdir -p /home/azureuser/dest && test -d /home/azureuser/dest
+	sudo cp . /home/azureuser/dest
+	sudo tar -czvf dest.tar.gz .
+	sudo scp /home/azureuser/dest azureuser@20.55.79.184:/home/azureuser/
 	 
 	 
           """
