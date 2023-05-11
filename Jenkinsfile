@@ -35,10 +35,10 @@ pipeline {
           sh """
 	
 	
-	mkdir -p /home/azureuser/dest && test -d /home/azureuser/dest
-	cp . /home/azureuser/dest
-	tar -czvf dest.tar.gz .
-	scp /home/azureuser/dest azureuser@20.55.79.184:/home/azureuser/
+	sudo mkdir -p /home/azureuser/dest && test -d /home/azureuser/dest
+	sudo cp . /home/azureuser/dest
+	sudo tar -czvf dest.tar.gz .
+	sudo scp /home/azureuser/dest azureuser@20.55.79.184:/home/azureuser/
 	 
 	 
           """
@@ -54,15 +54,15 @@ pipeline {
               
          
 		 ssh azureuser@20.55.79.184
-		 mkdir -p /home/azureuser/bkp
+		 sudo mkdir -p /home/azureuser/bkp
 		 cd /home/azureuser/
 		 pwd
-		 cp dest.tar.gz /home/azureuser/bkp
-		 tar -xzvf dest.tar.gz
+		 sudo cp dest.tar.gz /home/azureuser/bkp
+		 sudo tar -xzvf dest.tar.gz
 		 cd dest
-		 ./install_python.sh
+		 sudo ./install_python.sh
 		 test -f /home/azureuser/dest/requirements.txt
-		 pip3 install -r /home/azureuser/dest/requirements.txt
+		 sudo pip3 install -r /home/azureuser/dest/requirements.txt
 		 
 		 	
 	
