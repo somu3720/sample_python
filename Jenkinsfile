@@ -17,16 +17,6 @@ pipeline {
 	STAGE_NAME = ""
   }
 	
-def success(message) {
-    currentBuild.result = 'SUCCESS'
-    echo 'succeeded in the above step'
-  }
-}
-
-def error(message) {
-    currentBuild.result = 'FAILURE'
-    echo 'failed in the above step'
-}	
 
   stages {
   
@@ -47,6 +37,19 @@ def error(message) {
 					sh 'check weather requirements.txt is present or not in destination folder'
 					ssh -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$SSH_KNOWN_HOSTS user@example.com 'pip3 install -r requirements.txt'
     
+    
+    
+    	
+def success(message) {
+    currentBuild.result = 'SUCCESS'
+    echo 'succeeded in the above step'
+  }
+}
+
+def error(message) {
+    currentBuild.result = 'FAILURE'
+    echo 'failed in the above step'
+}
     
     */
  	
