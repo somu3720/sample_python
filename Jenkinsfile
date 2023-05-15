@@ -64,9 +64,10 @@ pipeline {
               	 ssh deploy_jenkins@40.76.244.235
          	 whoami
 		 pwd
-		 cp /destiny/dest.tar.gz /bkp
-		 tar -xzvf /destiny/dest.tar.gz
 		 cd /destiny
+		 cp dest.tar.gz /bkp
+		 tar -xzvf dest.tar.gz
+		 cd /destin
 		 ./install_python.sh
 		 test -f /destiny/requirements.txt
 		 pip3 install -r /destiny/requirements.txt
