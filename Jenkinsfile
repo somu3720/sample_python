@@ -62,17 +62,17 @@ pipeline {
           timeout(time: 10, unit: 'MINUTES') {
             script {
               sh """
-              
+              	 ssh azureuser@20.55.79.184
          	 whoami
-		 ssh azureuser@20.55.79.184 'mkdir -p /home/azureuser/bkp'
-		 ssh azureuser@20.55.79.184 'cd /home/azureuser/'
-		 ssh azureuser@20.55.79.184 'pwd'
-		 ssh azureuser@20.55.79.184 'cp dest.tar.gz /home/azureuser/bkp'
-		 ssh azureuser@20.55.79.184 'tar -xzvf dest.tar.gz'
-		 ssh azureuser@20.55.79.184 'cd dest'
-		 ssh azureuser@20.55.79.184 './install_python.sh'
-		 ssh azureuser@20.55.79.184 'test -f /home/azureuser/dest/requirements.txt'
-		 ssh azureuser@20.55.79.184 'pip3 install -r /home/azureuser/dest/requirements.txt'
+		 mkdir -p /home/azureuser/bkp
+		 cd /home/azureuser/
+		 pwd
+		 cp dest.tar.gz /home/azureuser/bkp
+		 tar -xzvf dest.tar.gz
+		 cd dest
+		 ./install_python.sh
+		 test -f /home/azureuser/dest/requirements.txt
+		 pip3 install -r /home/azureuser/dest/requirements.txt
 		 
 		 	
 	
