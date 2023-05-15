@@ -47,8 +47,8 @@ pipeline {
 	tar -czvf dest.tar.gz /test/
 	echo Jenkins@1234 | sudo -S -u azureuser whoami  
 	whoami
-	scp /test/dest/MDQLDEMO/dest.tar.gz jenkins@20.55.79.184:/
-	ssh jenkins@20.55.79.184 'ls -la /'
+	scp /test/dest/MDQLDEMO/dest.tar.gz jenkins@20.55.79.184:/dest
+	ssh jenkins@20.55.79.184 'ls -la /dest'
 	
 	 
 	 
@@ -64,12 +64,10 @@ pipeline {
               sh """
               	 ssh-tt deploy_jenkins@40.76.244.235
          	 whoami
-		 
-		 cd /h
 		 pwd
-		 cp dest.tar.gz /bkp
-		 tar -xzvf dest.tar.gz
-		 cd dest
+		 cp /dest/dest.tar.gz /bkp
+		 tar -xzvf /dest/dest.tar.gz
+		 cd /dest/dest
 		 ./install_python.sh
 		 test -f /dest/requirements.txt
 		 pip3 install -r /dest/requirements.txt
