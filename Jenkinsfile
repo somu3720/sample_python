@@ -61,7 +61,7 @@ pipeline {
           timeout(time: 10, unit: 'MINUTES') {
             script {
               sh """
-              	 ssh deploy_jenkins@40.76.244.235
+              	 ssh 'StrictHostKeyChecking=no' deploy_jenkins@40.76.244.235
          	 whoami
 		 pwd
 		 cp /dest/dest.tar.gz /bkp
