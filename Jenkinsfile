@@ -64,7 +64,7 @@ pipeline {
               sh """
               
          	 whoami
-		 ssh jenkins@20.55.79.184
+		 ssh -tt azureuser@20.55.79.184
 		 mkdir -p /home/azureuser/bkp
 		 cd /home/azureuser/
 		 pwd
