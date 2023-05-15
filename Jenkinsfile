@@ -46,8 +46,8 @@ pipeline {
 	pwd
 	tar -czvf dest.tar.gz /test/
 	whoami
-	scp /test/dest/MDQLDEMO/dest.tar.gz deploy_jenkins@40.76.244.235:/dest
-	ssh deploy_jenkins@40.76.244.235 'ls -la /dest'
+	scp /test/dest/MDQLDEMO/dest.tar.gz deploy_jenkins@40.76.244.235:/destiny
+	ssh deploy_jenkins@40.76.244.235 'ls -la /destiny'
 	
 	 
 	 
@@ -64,12 +64,12 @@ pipeline {
               	 ssh deploy_jenkins@40.76.244.235
          	 whoami
 		 pwd
-		 cp /dest/dest.tar.gz /bkp
-		 tar -xzvf /dest/dest.tar.gz
-		 cd /dest/dest
+		 cp /destiny/dest.tar.gz /bkp
+		 tar -xzvf /destiny/dest.tar.gz
+		 cd /destiny
 		 ./install_python.sh
-		 test -f /dest/requirements.txt
-		 pip3 install -r /dest/requirements.txt
+		 test -f /destiny/requirements.txt
+		 pip3 install -r /destiny/requirements.txt
 		 
 		 	
 	
