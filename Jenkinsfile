@@ -58,28 +58,23 @@ pipeline {
     }
     stage('Deployment') {
       steps {
-        retry(3) {
-          timeout(time: 10, unit: 'MINUTES') {
+        
             script {
               sh """
               	 ssh deploy_jenkins@40.76.244.235
-         	 whoami
-		 pwd
-		 cd /destiny
-		 cp dest.tar.gz /bkp
-		 tar -xzvf dest.tar.gz
-		 cd /destin
-		 ./install_python.sh
-		 test -f /destiny/requirements.txt
-		 pip3 install -r /destiny/requirements.txt
+         	 ssh deploy_jenkins@40.76.244.235 'whoami'
+		 ssh deploy_jenkins@40.76.244.235 'pwd'
+		 ssh deploy_jenkins@40.76.244.235 'cd /destiny'
+		 ssh deploy_jenkins@40.76.244.235 'cp dest.tar.gz /bkp'
+		 ssh deploy_jenkins@40.76.244.235 'tar -xzvf dest.tar.gz'
+		 ssh deploy_jenkins@40.76.244.235 './install_python.sh'
+		 ssh deploy_jenkins@40.76.244.235 'test -f /destiny/requirements.txt'
+		 ssh deploy_jenkins@40.76.244.235 'pip3 install -r /destiny/requirements.txt'
 		 
-		 	
-	
-                "
+                
               """
             }
-          }
-        }
+
       }
     }
     stage('Rollback') {
