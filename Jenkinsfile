@@ -13,6 +13,7 @@ pipeline {
   }
 
   stages {
+	  // need ssh2 easy plugin
 	 // pre-dep
 	 //  mkdir -p ${DESTINATION_FOLDER} && test -d ${DESTINATION_FOLDER}
           //  cp . ${DESTINATION_FOLDER}
