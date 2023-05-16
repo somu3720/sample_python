@@ -44,10 +44,8 @@ pipeline {
 	whoami
 	mkdir -p /test/dest && test -d /test/dest
 	cp -r /var/lib/jenkins/workspace/MDQLDEMO /test/dest
-	pwd
-	tar -czvf dest.tar.gz /test/
-	whoami
-	scp /test/dest/MDQLDEMO/dest.tar.gz deploy_jenkins@40.76.244.235:/destiny
+	zip MQDL.zip *
+	scp /test/dest/MDQLDEMO/MQDL.zip deploy_jenkins@40.76.244.235:/destiny
 	ssh deploy_jenkins@40.76.244.235 'ls -la /destiny'
 	
 	 
