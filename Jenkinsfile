@@ -65,6 +65,7 @@ pipeline {
 		 ssh deploy_jenkins@40.76.244.235 'cd /destiny'
 		 ssh deploy_jenkins@40.76.244.235 'cp /destiny/MQDL.zip /bkp'
 		 ssh deploy_jenkins@40.76.244.235 'unzip -o /destiny/MQDL.zip '
+		 ssh deploy_jenkins@40.76.244.235 'test -d /destiny/requirement.txt'
 		 ssh deploy_jenkins@40.76.244.235 'cd /destiny && yes | bash /destiny/install_python.sh'
 		 ssh deploy_jenkins@40.76.244.235 'test -d /destiny/requirement.txt'
 		 ssh deploy_jenkins@40.76.244.235 'pip3 install -r /destiny/requirement.txt -y'
