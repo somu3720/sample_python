@@ -80,11 +80,9 @@ pipeline {
           sh """
    
   	
-	      ssh azureuser@20.55.79.184
-	      sudo mkdir -p /home/azureuser/rlbk/
-	      cd /home/azureuser/
-	      sudo mv dest.tar.gz /home/azureuser/rlbk
-	      sudo rm -rf dest.tar.gz /home/azureuser/dest
+	      
+	      mv /destiny/* /rlbk
+	      rm -rf /destiny/*
 	    
 
             "
