@@ -61,7 +61,7 @@ pipeline {
         
             script {
               sh """
-              	 ssh deploy_jenkins@40.76.244.235
+              	 
          	 ssh deploy_jenkins@40.76.244.235 'whoami'
 		 ssh deploy_jenkins@40.76.244.235 'pwd'
 		 ssh deploy_jenkins@40.76.244.235 'cd /destiny'
