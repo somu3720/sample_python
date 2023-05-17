@@ -85,7 +85,7 @@ pipeline {
 	      ssh deploy_jenkins@40.76.244.235 'rm -rf /destiny/*'
 	    
 
-            "
+            
           """
         }
       }
