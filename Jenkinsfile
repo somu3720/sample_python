@@ -81,7 +81,7 @@ pipeline {
    
   	
 	      
-	      ssh deploy_jenkins@40.76.244.235 'mv -o /destiny/* /rlbk'
+	      ssh deploy_jenkins@40.76.244.235 'mv -f /destiny/* /rlbk'
 	      ssh deploy_jenkins@40.76.244.235 'rm /destiny/*'
 	    
 
