@@ -44,7 +44,7 @@ pipeline {
 	whoami
 	mkdir -p /test/dest && test -d /test/dest
 	zip MQDL.zip *
-	cp -r /var/lib/jenkins/workspace/MDQLDEMO/*.zip /test/dest
+	cp -r /var/lib/jenkins/workspace/MDQLDEMO/MQDL.zip /test/dest
 	scp /test/dest/MQDL.zip deploy_jenkins@40.76.244.235:/destiny
 	ssh deploy_jenkins@40.76.244.235 'ls -la /destiny'
 	
@@ -54,7 +54,7 @@ pipeline {
         }
       }
     }
-    stage('Deployment') {
+/*    stage('Deployment') {
       steps {
         
             script {
@@ -73,7 +73,39 @@ pipeline {
             }
 
       }
+    }    */
+	  
+  stage('Deployment') {
+  steps {
+    retry(3) {
+      timeout(time: 10, unit: 'MINUTES') {
+        script {
+          def bkpFolder = "/bkp/backup_${new Date().format('yyyyMMdd_HHmmss')}"
+
+          sh """
+            ssh deploy_jenkins@0.0.0.0 'whoami'
+            ssh deploy_jenkins@0.0.0.0 'pwd'
+            ssh deploy_jenkins@0.0.0.0 'cd /destiny'
+            ssh deploy_jenkins@0.0.0.0 'mkdir -p ${bkpFolder}'  # Create /bkp folder with timestamp
+
+            if ssh deploy_jenkins@0.0.0.0 '[ -d "/bkp" ]'; then
+              ssh deploy_jenkins@0.0.0.0 'cp /destiny/MQDL.zip ${bkpFolder}'  # Copy MQDL.zip to /bkp folder
+            else
+              echo "The /bkp folder does not exist."
+            fi
+
+            ssh deploy_jenkins@0.0.0.0 'unzip -o /destiny/MQDL.zip'
+            ssh deploy_jenkins@0.0.0.0 'yes | bash /destiny/install_python.sh'
+            ssh deploy_jenkins@0.0.0.0 'yes | pip3 install -r /destiny/requirement.txt'
+          """
+        }
+      }
     }
+  }
+}
+	  
+	  
+	  
     stage('Rollback') {
       steps {
         script {
